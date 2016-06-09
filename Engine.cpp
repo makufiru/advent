@@ -1,34 +1,33 @@
 #include "Engine.h"
-#include "player.h"
+#include "Player.h"
 #include "Input.h"
-#include "projectile.h"
+#include "Projectile.h"
 
-int Engine::mScreenWidth = 0;
-int Engine::mScreenHeight = 0;
-bool Engine::mIsRunning = true;
+int Engine::screenWidth = 0;
+int Engine::screenHeight = 0;
+bool Engine::isRunning = true;
 
 Engine::Engine()
 {
-	mRenderer = nullptr;
-	mWindow = nullptr;
-
+	renderer = nullptr;
+	window = nullptr;
 	// if you turn this off you can watch it do ugly antialiasing on rotation
 	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "2");
 }
 
 Engine::~Engine()
 {
-	SDL_DestroyWindow(mWindow);
-	SDL_DestroyRenderer(mRenderer);
+	SDL_DestroyWindow(window);
+	SDL_DestroyRenderer(renderer);
 	SDL_Quit();
 }
 
 void Engine::Run(int w, int h)
 {
-	mScreenWidth = w;
-	mScreenHeight = h;
+	screenWidth = w;
+	screenHeight = h;
 
-	if (init() == false)
+	if (Init() == false)
 	{
 		printf("Failed to init the Engine. SDL Error:  %s\n", SDL_GetError());
 	}
@@ -38,7 +37,7 @@ void Engine::Run(int w, int h)
 	}
 }
 
-bool Engine::init()
+bool Engine::Init()
 {
 	if (SDL_Init(SDL_INIT_VIDEO) != 0)
 	{
@@ -46,42 +45,38 @@ bool Engine::init()
 		return false;
 	}
 
-	mWindow = SDL_CreateWindow("Advent", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, mScreenWidth, mScreenHeight, SDL_WINDOW_SHOWN);
+	window = SDL_CreateWindow("Advent", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, screenWidth, screenHeight, SDL_WINDOW_SHOWN);
 
-	if (mWindow == nullptr)
+	if (window == nullptr)
 	{
 		printf("SDL Failed to create a window. SDL Error:  %s\n", SDL_GetError());
 		return false;
 	}
 
-	mRenderer = SDL_CreateRenderer(mWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-	if (mRenderer == nullptr)
+	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+	if (renderer == nullptr)
 	{
 		printf("SDL failed to create a renderer. SDL Error:  %s\n", SDL_GetError());
 		return false;
 	}
 
-	mBackground.loadFromFile(mRenderer, "resources/space_bg.png");
+	background.LoadFromFile(renderer, "resources/space_bg.png");
 	return true;
-	
-}
 
+}
 
 //Engine::gameLoop()  Kappa.
 void Engine::gameLoop()
 {
-	mPlayer = new player(mRenderer);
-	mCrosshair = new crosshair(mRenderer);
-	mInput = new Input();
-	
+	player = new Player(renderer);
+	crosshair = new Crosshair(renderer);
+	input = new Input();
 	float dt = 1 / 60.0f;
 	float currentTime = SDL_GetTicks() / 1000.0f;
 
-
-	while (mIsRunning)
+	while (isRunning)
 	{
 		processInputs();
-		
 		//update stuff
 		float newTime = SDL_GetTicks() / 1000.0f;
 		float frameTime = newTime - currentTime;
@@ -92,55 +87,47 @@ void Engine::gameLoop()
 			float deltaTime = std::min(frameTime, dt);
 			frameTime -= deltaTime;
 		}
-			update();
+		update();
 	}
 }
 
 void Engine::processInputs()
 {
-	mInput->ProcessInput();
-	mCrosshair->HandleInput(mInput);
-	mPlayer->HandleInput(mInput);
+	input->ProcessInput();
+	crosshair->HandleInput(input);
+	player->HandleInput(input);
 
 }
 void Engine::update()
 {
-	if (!mPlayer->isDead)
+	if (!player->IsDead)
 	{
+		player->Update();
 		draw();
 	}
 }
 
 void Engine::draw()
 {
-	SDL_SetRenderDrawColor(mRenderer, 255, 255, 255, 255);
-	SDL_RenderClear(mRenderer);
-
-	SDL_RenderCopy(mRenderer, mBackground.getTexture(), NULL, NULL);
-	mPlayer->Render(mRenderer);
-
-	mCrosshair->Render(mRenderer);
-
-	SDL_RenderPresent(mRenderer);
-
-}
-int Engine::getScreenWidth()
-{
-	return mScreenWidth;
+	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+	SDL_RenderClear(renderer);
+	SDL_RenderCopy(renderer, background.GetTexture(), NULL, NULL);
+	player->Render(renderer);
+	crosshair->Render(renderer);
+	SDL_RenderPresent(renderer);
 }
 
-int Engine::getScreenHeight()
+int Engine::GetScreenWidth()
 {
-	return mScreenHeight;
+	return screenWidth;
 }
 
-void Engine::quit()
+int Engine::GetScreenHeight()
 {
-	mIsRunning = false;
+	return screenHeight;
 }
 
-
-void Engine::shoot()
+void Engine::Quit()
 {
-	
+	isRunning = false;
 }

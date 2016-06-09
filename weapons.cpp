@@ -1,34 +1,49 @@
-#include "weapons.h"
+#include "Weapons.h"
 
 
-weapons::weapons(SDL_Renderer *renderer)
+Weapons::Weapons(SDL_Renderer *renderer)
 {
-	mRenderer = renderer;
-	mProjectileTexture.loadFromFile(mRenderer, "resources/bulletSprite_1.png");
-	mSDLTexture = mProjectileTexture.getTexture();
-
+	this->renderer = renderer;
 };
 
-
-
-void weapons::shoot(Vector2 position)
+void Weapons::Shoot(Vector2 position, Vector2 direction, double angle)
 {
-	mPosition = position;
-	projectiles.emplace_back(mPosition);
-	printf("shot stuff. pew pew.");
+	projectiles.emplace_back(renderer, position, direction, angle);
+
 }
 
-
-SDL_Texture *weapons::getProjectileTexture()
-{
-	return mSDLTexture;
-}
-
-void weapons::render(SDL_Renderer *renderer)
+void Weapons::Render(SDL_Renderer *renderer)
 {
 	for (int i = 0; i < projectiles.size(); i++)
 	{
-	SDL_Rect renderQuad = { mPosition.x, mPosition.y, 32, 32 };
-	SDL_RenderCopyEx(renderer, mSDLTexture, NULL, &renderQuad, NULL, NULL, SDL_FLIP_NONE);
+		projectiles[i].Render(renderer);
 	}
+}
+
+void Weapons::Update()
+{
+	
+	for (std::vector<Projectile>::iterator iter = projectiles.begin(); iter != projectiles.end();)
+	{
+		if ((*iter).isDead)
+		{
+			iter = projectiles.erase(iter);
+			continue;
+		}
+		else
+		{
+			(*iter).Update();
+			++iter;
+		}
+	}
+	
+	/*for (int i = projectiles.size(); i-- > 0;)
+	{
+		projectiles[i].Update();
+		if (projectiles[i].isDead)
+		{
+			projectiles.erase(projectiles.begin() + i);
+		}
+
+	}*/
 }

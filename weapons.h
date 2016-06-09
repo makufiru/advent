@@ -1,35 +1,20 @@
 #pragma once
-
-
 #include <vector>
-#include "projectile.h"
+#include "Projectile.h"
 #include "Texture.h"
 
 class player;
 
-class weapons
+class Weapons
 {
 public:
-	
-	weapons(SDL_Renderer *renderer);
-	
-	void render(SDL_Renderer *renderer);
-	SDL_Texture* getProjectileTexture();
-	void shoot(Vector2 position);
-
+	Weapons(SDL_Renderer *renderer);
+	void Render(SDL_Renderer *renderer);
+	void Shoot(Vector2 position, Vector2 direction, double angle);
+	void Update();
 	//vector to contain projectiles
-	std::vector<projectile> projectiles;
-	
-	double shotInterval = 250;
+	std::vector<Projectile> projectiles;
 
 private:
-
-	SDL_Renderer *mRenderer;
-	Texture mProjectileTexture;
-	SDL_Texture *mSDLTexture;
-	Vector2 mPosition;
-
-
-
+	SDL_Renderer *renderer;
 };
-

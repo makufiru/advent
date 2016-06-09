@@ -1,11 +1,10 @@
 #pragma once
 #include <SDL.h>
 #include <SDL_image.h>
-#include "utilities.h"
-#include "Texture.h"
 #include "Input.h"
-#include "weapons.h"
-//#include "projectile.h"
+#include "Texture.h"
+#include "Vector2.h"
+#include "Weapons.h"
 
 enum Axis {
 	X,
@@ -14,44 +13,46 @@ enum Axis {
 
 
 
-class player
+class Player
 {
 public:
-	player(SDL_Renderer *renderer);
-	~player();
+	Player(SDL_Renderer *renderer);
+	~Player();
 
-	void shoot();
-	SDL_Texture* getPlayerTexture();
-
-	void Render(SDL_Renderer *mRenderer);
+	void Update();
+	SDL_Texture* GetPlayerTexture();
+	void Render(SDL_Renderer *renderer);
 	void HandleInput(Input *input);
-	Vector2 getPosition() const;
+	Vector2 GetPosition() const;
+	
+	bool IsDead = false;
+	double SpriteAngle;
 
-public:
-	bool isDead = false;
-	double spriteAngle;
+private:
+	void shoot();
+
 	Uint32 lastShotTime;
 	Uint32 currentTime;
 	double shotInterval = 250;
-
-private:
 	int getMoveSpeed();
 	void movePlayer(Axis axis, int moveAmount);
-	
-private:
-	double mPlayerHealth;
-	Texture mPlayerTexture;
-	SDL_Texture *mSDLTexture;
-	SDL_Rect mSpriteClips[1];
-	Texture mRenderTexture;
-	SDL_Renderer *mRenderer;
-	//vector2 to hold position. 
-	Vector2 mPosition;
-	int mWidth;
-	int mHeight;
-	int moveSpeed;
-	weapons *blaster;
+	double playerHealth;
+	Texture playerTexture;
+	SDL_Texture *SDLTexture;
+	SDL_Rect SpriteClips[1];
+	Texture RenderTexture;
 
+	//vector2 to hold position. 
+	Vector2 position;
+	Vector2 playerCenter;
+	//Vector2 bulletPos;
+	Vector2* mousePosition;
+
+	float width;
+	float height;
+	int moveSpeed;
+	Weapons *blaster;
+	
 	//Player rotation in degrees
-	double mAngle;
+	double angle;
 };

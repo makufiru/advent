@@ -5,21 +5,21 @@
 
 Texture::Texture()
 {
-	mTexture = nullptr;
-	mWidth = 0;
-	mHeight = 0;
-	
+	texture = nullptr;
+	width = 0;
+	height = 0;
+
 }
 
 Texture::~Texture()
 {
-	free();
+	Free();
 }
 
 
-bool Texture::loadFromFile(SDL_Renderer* gRenderer, const std::string path) 
+bool Texture::LoadFromFile(SDL_Renderer* gRenderer, const std::string path)
 {
-	free();
+	Free();
 
 	//final texture
 	SDL_Texture* finalTexture = nullptr;
@@ -40,45 +40,44 @@ bool Texture::loadFromFile(SDL_Renderer* gRenderer, const std::string path)
 		}
 		else
 		{
-			mWidth = w;
-			mHeight = h;
+			width = w;
+			height = h;
 		}
 	}
 
-	
 	//sets our suface turned texture to our member vairable texture.
-	mTexture = finalTexture;
-	return mTexture != nullptr;
+	texture = finalTexture;
+	return texture != nullptr;
 
 
 }
 
 
-void Texture::free()
+void Texture::Free()
 {
-	if (mTexture != nullptr)
+	if (texture != nullptr)
 	{
-		SDL_DestroyTexture(mTexture);
-		mTexture = nullptr;
+		SDL_DestroyTexture(texture);
+		texture = nullptr;
 
-		mWidth = 0;
-		mHeight = 0;
+		width = 0;
+		height = 0;
 	}
 }
 
 
-int Texture::getWidth()
+float Texture::GetWidth()
 {
-	return mWidth;
+	return width;
 }
 
-int Texture::getHeight()
+float Texture::GetHeight()
 {
-	return mHeight;
+	return height;
 }
 
-SDL_Texture* Texture::getTexture()
+SDL_Texture* Texture::GetTexture()
 {
-	return mTexture;
+	return texture;
 }
 

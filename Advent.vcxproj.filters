@@ -30,29 +30,32 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Texture.cpp">
       <Filter>Source Files\graphics</Filter>
     </ClCompile>
     <ClCompile Include="Engine.cpp">
       <Filter>Source Files\engine</Filter>
     </ClCompile>
-    <ClCompile Include="player.cpp">
-      <Filter>Source Files\entities</Filter>
-    </ClCompile>
     <ClCompile Include="Input.cpp">
       <Filter>Source Files\input</Filter>
     </ClCompile>
-    <ClCompile Include="crosshair.cpp">
+    <ClCompile Include="Crosshair.cpp">
       <Filter>Source Files\entities</Filter>
     </ClCompile>
-    <ClCompile Include="projectile.cpp">
+    <ClCompile Include="Weapons.cpp">
+      <Filter>Source Files\entities</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Source Files\entities</Filter>
+    </ClCompile>
+    <ClCompile Include="Main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Projectile.cpp">
       <Filter>Source Files\entities\particles</Filter>
     </ClCompile>
-    <ClCompile Include="weapons.cpp">
-      <Filter>Source Files\entities</Filter>
+    <ClCompile Include="Vector2.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -62,26 +65,29 @@
     <ClInclude Include="Engine.h">
       <Filter>Source Files\engine</Filter>
     </ClInclude>
-    <ClInclude Include="player.h">
-      <Filter>Source Files\entities</Filter>
-    </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Input.h">
       <Filter>Source Files\input</Filter>
     </ClInclude>
-    <ClInclude Include="crosshair.h">
-      <Filter>Source Files\entities</Filter>
-    </ClInclude>
-    <ClInclude Include="projectile.h">
-      <Filter>Source Files\entities\particles</Filter>
-    </ClInclude>
     <ClInclude Include="utilities.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="weapons.h">
+    <ClInclude Include="Crosshair.h">
       <Filter>Source Files\entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Weapons.h">
+      <Filter>Source Files\entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Source Files\entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Projectile.h">
+      <Filter>Source Files\entities\particles</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector2.h">
+      <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
