@@ -11,7 +11,9 @@ Player::Player(SDL_Renderer* renderer)
 
 	position.X = (Engine::GetScreenWidth() / 2) - (width / 2);
 	position.Y = (Engine::GetScreenHeight() / 2) - (height / 2);
-	moveSpeed = 5;
+	moveSpeed = 0.5;
+	maxMoveSpeed = 10;
+	shotInterval = 150;
 
 	SDLTexture = playerTexture.GetTexture();
 	lastShotTime = 0;
@@ -25,26 +27,32 @@ Player::~Player()
 //handles key presses and mouse clicks 
 void Player::HandleInput(Input* input)
 {
-	if (input->KeyPressed(MOVE_UP))
-	{
-		movePlayer(Y, -moveSpeed);
+	// vertical
+	if (input->KeyPressed(MOVE_UP) && velocity.Y > -maxMoveSpeed) {
+		velocity.Y -= moveSpeed;
 	}
-	if (input->KeyPressed(MOVE_DOWN))
-	{
-		movePlayer(Y, moveSpeed);
+	else if (input->KeyPressed(MOVE_DOWN) && velocity.Y < maxMoveSpeed) {
+		velocity.Y += moveSpeed;
 	}
-	if (input->KeyPressed(MOVE_LEFT))
-	{
-		movePlayer(X, -moveSpeed);
+	else {
+		velocity.Y = velocity.Y * 0.9;
 	}
-	if (input->KeyPressed(MOVE_RIGHT))
-	{
-		movePlayer(X, moveSpeed);
+	
+	// horizontal
+	if (input->KeyPressed(MOVE_LEFT) && velocity.X > -maxMoveSpeed) {
+		velocity.X -= moveSpeed;
 	}
+	else if (input->KeyPressed(MOVE_RIGHT) && velocity.X < maxMoveSpeed) {
+		velocity.X += moveSpeed;
+	}
+	else {
+		velocity.X = velocity.X * 0.9;
+	}
+
+	// shooting
 	if (input->KeyPressed(SHOOT))
 	{
 		currentTime = SDL_GetTicks();
-
 		if ((currentTime - lastShotTime) > shotInterval)
 		{
 			shoot();
@@ -62,14 +70,8 @@ void Player::HandleInput(Input* input)
 
 }
 
-void Player::movePlayer(Axis axis, int moveAmount)
+void Player::checkBoundaries()
 {
-	if (axis == X) {
-		position.X += moveAmount;
-	}
-	else {
-		position.Y += moveAmount;
-	}
 	if ((position.X + (width*0.5))> Engine::GetScreenWidth())
 	{
 		position.X = 0 - (width*0.5);
@@ -86,6 +88,12 @@ void Player::movePlayer(Axis axis, int moveAmount)
 	{
 		position.Y = Engine::GetScreenHeight() - (height*0.5);
 	}
+}
+
+void Player::movePlayer()
+{
+	position.X += velocity.X;
+	position.Y += velocity.Y;
 }
 
 int Player::getMoveSpeed()
@@ -112,7 +120,6 @@ void Player::Render(SDL_Renderer *renderer)
 
 void Player::shoot()
 {
-
 	Vector2 directionVector = { mousePosition->X - playerCenter.X, mousePosition->Y - playerCenter.Y };
 	Vector2 normalizedDirection = directionVector.Normalize();
 	Vector2 direction = { normalizedDirection.X * width / 2 , normalizedDirection.Y * width / 2 };
@@ -122,5 +129,7 @@ void Player::shoot()
 
 void Player::Update()
 {
+	movePlayer();
+	checkBoundaries();
 	blaster->Update();
 }

@@ -6,13 +6,6 @@
 #include "Vector2.h"
 #include "Weapons.h"
 
-enum Axis {
-	X,
-	Y
-};
-
-
-
 class Player
 {
 public:
@@ -30,12 +23,12 @@ public:
 
 private:
 	void shoot();
-
+	void checkBoundaries();
 	Uint32 lastShotTime;
 	Uint32 currentTime;
-	double shotInterval = 250;
+	double shotInterval;
 	int getMoveSpeed();
-	void movePlayer(Axis axis, int moveAmount);
+	void movePlayer();
 	double playerHealth;
 	Texture playerTexture;
 	SDL_Texture *SDLTexture;
@@ -50,7 +43,10 @@ private:
 
 	float width;
 	float height;
-	int moveSpeed;
+	float moveSpeed;
+	float maxMoveSpeed;
+
+	Vector2 velocity;
 	Weapons *blaster;
 	
 	//Player rotation in degrees

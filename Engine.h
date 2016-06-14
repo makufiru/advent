@@ -36,6 +36,7 @@ private:
 	static bool isRunning;
 	static int screenWidth;
 	static int screenHeight;
+	float dt;
 
 
 };
