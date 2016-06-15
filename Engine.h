@@ -6,6 +6,8 @@
 #include "Texture.h"
 #include "Player.h"
 #include "Crosshair.h"
+#include "Audio.h"
+
 
 class Engine
 {
@@ -33,10 +35,14 @@ private:
 	SDL_Window* window;
 	SDL_Renderer* renderer;
 	Texture background;
+	Audio* gameAudio;
+	Mix_Music* gameBGMusic;
+	
 	static bool isRunning;
 	static int screenWidth;
 	static int screenHeight;
 	float dt;
+
 
 
 };

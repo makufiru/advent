@@ -3,12 +3,14 @@
 #include "Input.h"
 #include "Projectile.h"
 
+
 int Engine::screenWidth = 0;
 int Engine::screenHeight = 0;
 bool Engine::isRunning = true;
 
 Engine::Engine()
 {
+//	gameAudio;
 	renderer = nullptr;
 	window = nullptr;
 	// if you turn this off you can watch it do ugly antialiasing on rotation
@@ -39,7 +41,7 @@ void Engine::Run(int w, int h)
 
 bool Engine::Init()
 {
-	if (SDL_Init(SDL_INIT_VIDEO) != 0)
+	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) != 0)
 	{
 		printf("SDL failed to init SDL. SDL Error: %s\n", SDL_GetError());
 		return false;
@@ -59,6 +61,13 @@ bool Engine::Init()
 		printf("SDL failed to create a renderer. SDL Error:  %s\n", SDL_GetError());
 		return false;
 	}
+
+	gameAudio->LoadAudioMedia();
+	/*gameBGMusic = gameAudio->bgMusic;
+	if (gameBGMusic == nullptr) {
+		printf("you dun goofed. no bg music");
+	}*/
+	
 
 	background.LoadFromFile(renderer, "resources/space_bg.png");
 	return true;

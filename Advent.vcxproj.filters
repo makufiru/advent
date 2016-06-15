@@ -28,6 +28,9 @@
     <Filter Include="Source Files\entities\particles">
       <UniqueIdentifier>{8b18864a-2fb7-4428-b157-0bba55d49fa7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Audio">
+      <UniqueIdentifier>{31e4ddef-ef05-4050-8d4c-a389ec9e0c47}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Texture.cpp">
@@ -56,6 +59,9 @@
     </ClCompile>
     <ClCompile Include="Vector2.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Audio.cpp">
+      <Filter>Source Files\Audio</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -88,6 +94,12 @@
     </ClInclude>
     <ClInclude Include="Vector2.h">
       <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SDL_mixer.h">
+      <Filter>Source Files\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="Audio.h">
+      <Filter>Source Files\Audio</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

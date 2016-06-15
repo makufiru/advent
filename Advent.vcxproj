@@ -69,7 +69,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>C:\Users\QLCrisis\Documents\Visual Studio 2015\Libs\SDL\include;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Users\QLCrisis\Documents\Visual Studio 2015\Libs\SDL\include;C:\Users\QLCrisis\Documents\Visual Studio 2015\Libs\SDL\SDL2_mixer-2.0.1\include;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Users\QLCrisis\Documents\Visual Studio 2015\Libs\SDL\lib\x86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -80,7 +80,7 @@
       <AdditionalIncludeDirectories>C:\Users\Logan\SDL2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_mixer.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
       <AdditionalLibraryDirectories>C:\Users\Logan\SDL2\lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
@@ -125,6 +125,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Audio.cpp" />
     <ClCompile Include="Crosshair.cpp" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="Input.cpp" />
@@ -136,10 +137,12 @@
     <ClCompile Include="Weapons.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Audio.h" />
     <ClInclude Include="Crosshair.h" />
     <ClInclude Include="Engine.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Projectile.h" />
+    <ClInclude Include="SDL_mixer.h" />
     <ClInclude Include="utilities.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="resource.h" />
