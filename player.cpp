@@ -12,7 +12,7 @@ Player::Player(SDL_Renderer* renderer)
 	position.X = (Engine::GetScreenWidth() / 2) - (width / 2);
 	position.Y = (Engine::GetScreenHeight() / 2) - (height / 2);
 	moveSpeed = 0.5;
-	maxMoveSpeed = 10;
+	maxMoveSpeed = 15;
 	shotInterval = 150;
 
 	SDLTexture = playerTexture.GetTexture();
@@ -35,7 +35,7 @@ void Player::HandleInput(Input* input)
 		velocity.Y += moveSpeed;
 	}
 	else {
-		velocity.Y = velocity.Y * 0.9;
+		velocity.Y = velocity.Y * 0.95;
 	}
 	
 	// horizontal
@@ -46,7 +46,7 @@ void Player::HandleInput(Input* input)
 		velocity.X += moveSpeed;
 	}
 	else {
-		velocity.X = velocity.X * 0.9;
+		velocity.X = velocity.X * 0.95;
 	}
 
 	// shooting

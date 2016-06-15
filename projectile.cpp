@@ -17,7 +17,7 @@ Projectile::Projectile(SDL_Renderer *renderer, Vector2 position, Vector2 directi
 	rotation = angle;
 	this->direction = direction;
 
-	velocity = 0.1;
+	velocity = 0.5;
 	ttl = 100;
 	lifetime = 0;
 	isDead = false;
