@@ -1,35 +1,34 @@
-#include "crosshair.h"
+#include "Crosshair.h"
 #include "Engine.h"
 
-crosshair::crosshair(SDL_Renderer* mRenderer)
+Crosshair::Crosshair(SDL_Renderer* renderer)
 {
-	MousePosition cursorPosition = { 0, 0 };
-
-	mCrosshairTexture.loadFromFile(mRenderer, "resources/crosshair.png");
-	mWidth = mCrosshairTexture.getWidth();
-	mHeight = mCrosshairTexture.getHeight();
-	mSDLTexture = mCrosshairTexture.getTexture();
+	Vector2 cursorPosition = { 0, 0 };
+	crosshairTexture.LoadFromFile(renderer, "resources/crosshair.png");
+	width = crosshairTexture.GetWidth();
+	height = crosshairTexture.GetHeight();
+	SDLTexture = crosshairTexture.GetTexture();
 }
 
-crosshair::~crosshair()
+Crosshair::~Crosshair()
 {
 
 }
 
-void crosshair::HandleInput(Input* input)
+void Crosshair::HandleInput(Input* input)
 {
-	MousePosition mousePos = input->GetMousePosition();
-	cursorPosition.x = mousePos.x - (mWidth / 2);
-	cursorPosition.y = mousePos.y - (mWidth / 2);
+	Vector2* mousePos = input->GetMousePosition();
+	cursorPosition.X = mousePos->X - (width / 2);
+	cursorPosition.Y = mousePos->Y - (height / 2);
 }
 
-SDL_Texture *crosshair::getCrosshairTexture()
+SDL_Texture *Crosshair::getCrosshairTexture()
 {
-	return mSDLTexture;
+	return SDLTexture;
 }
 
-void crosshair::Render(SDL_Renderer *mRenderer) 
+void Crosshair::Render(SDL_Renderer *renderer)
 {
-	SDL_Rect renderQuad = { cursorPosition.x, cursorPosition.y, mWidth, mHeight };
-	SDL_RenderCopy(mRenderer, mSDLTexture, NULL, &renderQuad );
+	SDL_Rect renderQuad = { cursorPosition.X, cursorPosition.Y, width, height };
+	SDL_RenderCopy(renderer, SDLTexture, NULL, &renderQuad);
 }

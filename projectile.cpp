@@ -1,25 +1,47 @@
-#include "projectile.h"
+#include "Projectile.h"
 
-projectile::projectile(SDL_Renderer *mRenderer, player *mPlayerSource)
+static Texture texture;
+static SDL_Texture* projectileTexture = nullptr;
+
+
+Projectile::Projectile(SDL_Renderer *renderer, Vector2 position, Vector2 direction, double angle)
 {
-	mPosX = mPlayerSource->getPosX();
-	mPosY = mPlayerSource->getPosY();
-	mProjectileTexture.loadFromFile(mRenderer, "resources/bulletSprite_1.png");
-	mSDLTexture = mProjectileTexture.getTexture();
+	projectileTexture;
+	if (projectileTexture == nullptr)
+	{
+		texture.LoadFromFile(renderer, "resources/bulletSprite_1.png");
+		projectileTexture = texture.GetTexture();
+	}
+
+	this->position = position;
+	rotation = angle;
+	this->direction = direction;
+
+	velocity = 0.1;
+	ttl = 100;
+	lifetime = 0;
+	isDead = false;
+
 }
 
-projectile::~projectile()
+Projectile::~Projectile()
 {
-
 }
 
-SDL_Texture *projectile::getProjectileTexture()
+void Projectile::Render(SDL_Renderer *renderer)
 {
-	return mSDLTexture;
+	SDL_Rect renderQuad = { position.X, position.Y, 8, 8 };
+	SDL_RenderCopyEx(renderer, projectileTexture, NULL, &renderQuad, rotation, NULL, SDL_FLIP_NONE); 
 }
 
-void projectile::render(SDL_Renderer *mRenderer)
+void Projectile::Update()
 {
-	SDL_Rect renderQuad = { mPosX, mPosY, mWidth, mHeight };
-	SDL_RenderCopy(mRenderer, mSDLTexture, NULL, &renderQuad);
+	position.X += direction.X * velocity;
+	position.Y += direction.Y * velocity;
+
+	lifetime++;
+	if (lifetime >= ttl) {
+		isDead = true;
+	}
 }
+

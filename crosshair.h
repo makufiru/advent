@@ -4,32 +4,24 @@
 #include "Texture.h"
 #include "SDL.h"
 #include "Input.h"
-#include "player.h"
+#include "Player.h"
 
-
-class crosshair
+class Crosshair
 {
 public:
-	crosshair(SDL_Renderer *mRenderer);
-	~crosshair();
-
+	Crosshair(SDL_Renderer *renderer);
+	~Crosshair();
 	SDL_Texture* getCrosshairTexture();
-
 	void Render(SDL_Renderer *mRenderer);
 	void HandleInput(Input *input);
 
-public:
-
 private:
-
-private:
-	Texture mCrosshairTexture;
-	SDL_Texture *mSDLTexture;
-	SDL_Renderer *mRenderer;
-	SDL_Rect mSpriteClips[1];
-	Texture mRenderTexture;
-	int mWidth;
-	int mHeight;
-
-	MousePosition cursorPosition;
+	Texture crosshairTexture;
+	SDL_Texture *SDLTexture;
+	SDL_Renderer *Renderer;
+	SDL_Rect SpriteClips[1];
+	Texture renderTexture;
+	int width;
+	int height;
+	Vector2 cursorPosition;
 };

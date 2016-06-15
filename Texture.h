@@ -10,30 +10,18 @@
 class Texture
 {
 public:
-	// con/de structors
 	Texture();
 	~Texture();
 
-	//loads from file....duh.
-	bool loadFromFile(SDL_Renderer* gRenderer, const std::string path);
-
-	//frees texture
-	void free();
-
-	//void render(int x, int y, SDL_Rect* clip = nullptr);
-
-	//get image dimension
-	int getWidth();
-	int getHeight();
-	SDL_Texture* getTexture();
-	
-
-
+	bool LoadFromFile(SDL_Renderer* gRenderer, const std::string path);
+	void Free();
+	float GetWidth();
+	float GetHeight();
+	SDL_Texture* GetTexture();
 
 private:
 
-	SDL_Texture* mTexture;
-
-	int mWidth;
-	int mHeight;
+	SDL_Texture* texture;
+	float width;
+	float height;
 };

@@ -1,15 +1,8 @@
 #pragma once
 #include <iostream>
 #include <string>
-#include <SDL.h>
 #include <unordered_map>
-#include "Texture.h"
-
-struct MousePosition
-{
-	int x;
-	int y;
-};
+#include "Vector2.h"
 
 enum InputEvent
 {
@@ -27,13 +20,11 @@ public:
 	~Input();
 	void ProcessInput();
 	bool KeyPressed(InputEvent input);
-	MousePosition GetMousePosition();
-public: 
+	Vector2* GetMousePosition();
 
-
-private: 
 
 private:
-	MousePosition mousePosition;
+	Vector2* mousePosition;
+
 	std::unordered_map<InputEvent, bool> keyStateMap;
 };

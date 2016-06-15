@@ -1,112 +1,135 @@
-#include "player.h"
+#include "Player.h"
 #include "Engine.h"
 
-player::player(SDL_Renderer* mRenderer)
+Player::Player(SDL_Renderer* renderer)
 {
+	blaster = new Weapons(renderer);
+	playerTexture.LoadFromFile(renderer, "resources/player_ship.png");
+	width = playerTexture.GetWidth();
+	height = playerTexture.GetHeight();
+	SpriteAngle = 0.0;
 
-		//mPlayerTexture.loadFromFile(mRenderer, "resources/shipSprite_1.png");
+	position.X = (Engine::GetScreenWidth() / 2) - (width / 2);
+	position.Y = (Engine::GetScreenHeight() / 2) - (height / 2);
+	moveSpeed = 0.5;
+	maxMoveSpeed = 10;
+	shotInterval = 150;
 
-		mPlayerTexture.loadFromFile(mRenderer, "resources/shipSprite_1.png");
-		mWidth = mPlayerTexture.getWidth();
-		mHeight = mPlayerTexture.getHeight();
-		spriteAngle = 0.0;
-
-		mPosX = (Engine::getScreenWidth() / 2) - (mWidth / 2);
-		mPosY = (Engine::getScreenHeight() /2) - (mHeight / 2);
-		moveSpeed = 5;
-
-		mSDLTexture = mPlayerTexture.getTexture();
+	SDLTexture = playerTexture.GetTexture();
+	lastShotTime = 0;
 }
 
-player::~player()
+Player::~Player()
 {
-	
+
 }
 
-void player::HandleInput(Input* input)
+//handles key presses and mouse clicks 
+void Player::HandleInput(Input* input)
 {
-	if (input->KeyPressed(MOVE_UP))
-	{
-		movePlayer(Y, -moveSpeed);
+	// vertical
+	if (input->KeyPressed(MOVE_UP) && velocity.Y > -maxMoveSpeed) {
+		velocity.Y -= moveSpeed;
 	}
-	if (input->KeyPressed(MOVE_DOWN))
-	{
-		movePlayer(Y, moveSpeed);
-	}
-	if (input->KeyPressed(MOVE_LEFT))
-	{
-		movePlayer(X, -moveSpeed);
-	}
-	if (input->KeyPressed(MOVE_RIGHT))
-	{
-		movePlayer(X, moveSpeed);
-	}
-
-
-	if (input->KeyPressed(SHOOT))
-	{
-		printf(" \n key press passed to player object");
-		//-----------------------------------Do shit here. 
-	}
-
-
-
-	//Calculate the angle to the mouse cursor and set the player rotation accordingly
-	MousePosition mousePosition = input->GetMousePosition();
-	double playerPosX = mPosX + mWidth / 2;
-	double playerPosY = mPosY + mHeight / 2;
-
-
-	double deltaX = mousePosition.x - playerPosX;
-	double deltaY = mousePosition.y - playerPosY;
-	
-
-	mAngle = atan2(deltaY, deltaX) * 180 / M_PI;
-	mAngle += 90.0; //Add 90 to rotate the texture correctly
-}
-
-void player::movePlayer(Axis axis, int moveAmount) 
-{
-	if (axis == X) {
-		mPosX += moveAmount;
+	else if (input->KeyPressed(MOVE_DOWN) && velocity.Y < maxMoveSpeed) {
+		velocity.Y += moveSpeed;
 	}
 	else {
-		mPosY += moveAmount;
+		velocity.Y = velocity.Y * 0.9;
 	}
-	if ((mPosX + (mWidth*0.5))> Engine::getScreenWidth())
-	{
-		mPosX = 0 - (mWidth*0.5);
+	
+	// horizontal
+	if (input->KeyPressed(MOVE_LEFT) && velocity.X > -maxMoveSpeed) {
+		velocity.X -= moveSpeed;
 	}
-	else if ((mPosX + (mWidth*0.5)) < 0)
-	{
-		mPosX = Engine::getScreenWidth() - (mWidth*0.5);
+	else if (input->KeyPressed(MOVE_RIGHT) && velocity.X < maxMoveSpeed) {
+		velocity.X += moveSpeed;
 	}
-	else if ((mPosY + (mHeight*0.5)) > Engine::getScreenHeight())
-	{
-		mPosY = 0 - (mHeight*0.5);
+	else {
+		velocity.X = velocity.X * 0.9;
 	}
-	else if ((mPosY + (mHeight*0.5)) < 0)
+
+	// shooting
+	if (input->KeyPressed(SHOOT))
 	{
-		mPosY = Engine::getScreenHeight() - (mHeight*0.5);
+		currentTime = SDL_GetTicks();
+		if ((currentTime - lastShotTime) > shotInterval)
+		{
+			shoot();
+			lastShotTime = SDL_GetTicks();
+		}
+	}
+
+	//Calculate the angle to the mouse cursor and set the player rotation accordingly
+	mousePosition = input->GetMousePosition();
+	playerCenter = { position.X + width / 2, position.Y + height / 2 };
+	Vector2 delta = { mousePosition->X - playerCenter.X, mousePosition->Y - playerCenter.Y };
+
+	angle = atan2(delta.Y, delta.X) * 180 / M_PI;
+	angle += 90.0; //Add 90 to rotate the texture correctly
+
+}
+
+void Player::checkBoundaries()
+{
+	if ((position.X + (width*0.5))> Engine::GetScreenWidth())
+	{
+		position.X = 0 - (width*0.5);
+	}
+	else if ((position.X + (width*0.5)) < 0)
+	{
+		position.X = Engine::GetScreenWidth() - (width*0.5);
+	}
+	else if ((position.Y + (height*0.5)) > Engine::GetScreenHeight())
+	{
+		position.Y = 0 - (height*0.5);
+	}
+	else if ((position.Y + (height*0.5)) < 0)
+	{
+		position.Y = Engine::GetScreenHeight() - (height*0.5);
 	}
 }
 
-int player::getMoveSpeed() {
+void Player::movePlayer()
+{
+	position.X += velocity.X;
+	position.Y += velocity.Y;
+}
+
+int Player::getMoveSpeed()
+{
 	return moveSpeed;
 }
-int player::getPosX(){
-	return mPosX;
+
+Vector2 Player::GetPosition() const
+{
+	return position;
 }
 
-int player::getPosY() {
-	return mPosY;	
+SDL_Texture *Player::GetPlayerTexture()
+{
+	return SDLTexture;
 }
 
-SDL_Texture *player::getPlayerTexture() {
-	return mSDLTexture;
+void Player::Render(SDL_Renderer *renderer)
+{
+	blaster->Render(renderer);
+	SDL_Rect renderQuad = { position.X, position.Y, width, height };
+	SDL_RenderCopyEx(renderer, SDLTexture, NULL, &renderQuad, angle, NULL, SDL_FLIP_NONE);
 }
 
-void player::Render(SDL_Renderer *mRenderer) {
-	SDL_Rect renderQuad = { mPosX, mPosY, mWidth, mHeight };
-	SDL_RenderCopyEx(mRenderer, mSDLTexture, NULL, &renderQuad, mAngle, NULL, SDL_FLIP_NONE);
+void Player::shoot()
+{
+	Vector2 directionVector = { mousePosition->X - playerCenter.X, mousePosition->Y - playerCenter.Y };
+	Vector2 normalizedDirection = directionVector.Normalize();
+	Vector2 direction = { normalizedDirection.X * width / 2 , normalizedDirection.Y * width / 2 };
+	Vector2 bulletPos = { playerCenter.X + direction.X, playerCenter.Y + direction.Y };
+	blaster->Shoot(bulletPos, direction, angle);
+}
+
+void Player::Update()
+{
+	movePlayer();
+	checkBoundaries();
+	blaster->Update();
 }

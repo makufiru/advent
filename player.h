@@ -1,50 +1,54 @@
 #pragma once
 #include <SDL.h>
 #include <SDL_image.h>
-#include "Texture.h"
 #include "Input.h"
+#include "Texture.h"
+#include "Vector2.h"
+#include "Weapons.h"
 
-enum Axis {
-	X,
-	Y
-};
-
-class player
+class Player
 {
 public:
-	player(SDL_Renderer *mRenderer);
-	~player();
+	Player(SDL_Renderer *renderer);
+	~Player();
 
-	SDL_Texture* getPlayerTexture();
-
-	void Render(SDL_Renderer *mRenderer);
+	void Update();
+	SDL_Texture* GetPlayerTexture();
+	void Render(SDL_Renderer *renderer);
 	void HandleInput(Input *input);
-	int getPosX();
-	int getPosY();
-
-public:
-	bool isDead = false;
-	double spriteAngle;
+	Vector2 GetPosition() const;
+	
+	bool IsDead = false;
+	double SpriteAngle;
 
 private:
+	void shoot();
+	void checkBoundaries();
+	Uint32 lastShotTime;
+	Uint32 currentTime;
+	double shotInterval;
 	int getMoveSpeed();
-	void movePlayer(Axis axis, int moveAmount);
+	void movePlayer();
+	double playerHealth;
+	Texture playerTexture;
+	SDL_Texture *SDLTexture;
+	SDL_Rect SpriteClips[1];
+	Texture RenderTexture;
 
-private:
-	double mPlayerHealth;
-	Texture mPlayerTexture;
-	SDL_Texture *mSDLTexture;
-	SDL_Renderer *mRenderer;
-	SDL_Rect mSpriteClips[1];
-	Texture mRenderTexture;
-	int mWidth;
-	int mHeight;
-	int moveSpeed;
+	//vector2 to hold position. 
+	Vector2 position;
+	Vector2 playerCenter;
+	//Vector2 bulletPos;
+	Vector2* mousePosition;
 
-	//player coords
-	int mPosX;
-	int mPosY;
+	float width;
+	float height;
+	float moveSpeed;
+	float maxMoveSpeed;
 
+	Vector2 velocity;
+	Weapons *blaster;
+	
 	//Player rotation in degrees
-	double mAngle;
+	double angle;
 };
